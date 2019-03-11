@@ -1,0 +1,113 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <button class="button is-warning" (click)="showApproachFn()">How it's done?</button>
+    </div>
+  </div>
+</div>
+<div class="container" *ngIf="showApproach">
+    <h4 class="text-center">Task approach</h4>
+    <ol>
+      <li>
+          <p>Getting top articles from Hacker News, using their API. It returns list of 500 IDs for top articles.</p>
+      </li>
+      <li>
+          <p>Now need to get all articles. Each article has a field named "score", which shows the weight of article, i.g. how close to the top is stays. We can't use just 30 first articles, because the list is generated each time randomly.</p>
+          <ol>
+            <li>
+              <p> So I create the initial "top articles list" of first 30 items and save the lowest score of these.</p>
+            </li>
+            <li>
+              <p>After that for each article I look if its score is higher than my lowest. If it is - drop the lowest from saved 30 and add this article to list.</p>
+            </li>
+            <li>
+              <p> Continue until have new articles.</p>
+            </li>
+          </ol>
+      </li>
+      <li>
+        <p>
+          After the list of top articles is ready - starting to get the commentators.
+        </p>
+        <ol>
+          <li>
+            <p>Each article has list of "kids" - the IDs for comments, written for that article. So, assuming that each comment has the unique ID, I save all these comments to separate list.</p>
+          </li>
+          <li>
+            <p>Then I ask the API to give me each comment by its ID. The comment has the field "by", where is saved the nickname of comment author. </p>
+          </li>
+          <li>
+            <p>I need to save all comments in order to find if there are comments, written by same author. So I take each comment author's name and, if I didn't find the same name - save it as new object to my final list of commentators with new field, where I store how many times I saw this user, or if it is found - I increase the count.</p>
+          </li>
+          <li>
+            <p> At last - I sort the list by "count" field and leave first 10 users</p>
+          </li>
+        </ol>
+      </li>
+    </ol>
+    
+    
+
+</div>
+<div class="container" *ngIf="!showApproach">
+  
+  <div class="row">
+    <div class="col-12">
+      <h4 class="text-center">Task description</h4>
+      <div>
+        <p>1. Using the Hacker News API Documentation (<a href="https://github.com/HackerNews/API">https://github.com/HackerNews/API</a>) write a program that will print:</p>
+
+        <ul>
+          <li>
+            <p>The title of the top 30 hacker news stories</p>
+          </li>
+          <li>
+            <p>The top 10 commentator names of these stories</p>
+            <ul>
+              <li>With the total number of comments that they posted (only for these 30 stories)</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <p>2. The program has to parallelize requests and process the data as efficiently as possible.</p>
+
+      <p>3. Describe your approach.</p>
+    </div>
+  </div>
+</div>
+
+<div class="container" *ngIf="!showApproach">
+  <div class="row">
+    <div class="col-12">
+        <div class="text-center" *ngIf="!isLoadingArticles && !isLoadingCommentators">
+          <button class="button is-primary" (click)="startSearch()">Start</button>
+        </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <h5 class="title">Articles List</h5>
+      <div class="overlay" *ngIf="isLoadingArticles">
+        <p>{{message}}</p>
+      </div>
+      <p *ngFor=" let newsItem of news; let i = index">
+        <span class="number">{{i+1}}</span> - 
+        <a class="link" href="{{newsItem.url}}">{{newsItem.title}}</a>
+      </p>
+    </div>
+    <div class="col-6">
+      <h5 class="title">Top Commentators List</h5>
+      <div class="overlay" *ngIf="isLoadingCommentators">
+        <p>{{message}}</p>
+      </div>
+      <div *ngFor=" let commentator of topCommentators; let i = index" class="list-item">
+        <span class="number">{{i+1}}</span> - {{commentator.author.by}} <span class="count">{{commentator.count}} comment(s)</span>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+<router-outlet></router-outlet>
+

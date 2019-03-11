@@ -1,0 +1,32 @@
+.text-center {
+    text-align: center;
+}
+
+.number {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    background: #f6f7f8;
+    border-radius: 50%;
+}
+
+.list-item {
+    height: 30px;
+    line-height: 30px;
+    position: relative;
+    margin: 10px;
+    .count {
+        transform: translate(-27px, 7px) rotate(-20deg);
+        line-height: 1.4;
+        font-size: 12px;
+        padding: 1px 6px;
+        display: inline-block;
+        background-color: #faf4a5;
+        border-radius: 24px;
+    }
+}
+.button {
+    margin-bottom: 20px;
+}
